@@ -2,12 +2,14 @@ import { useState } from 'react';
 import s from './Form.module.css';
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContacts, getItems } from 'redux/contactsSlice';
+import {
+  useAddContactMutation,
+  useFetchContactsQuery,
+} from 'redux/contactsApi';
 
 const Form = () => {
-  const contacts = useSelector(getItems);
-  const dispatch = useDispatch();
+  const { data: contacts } = useFetchContactsQuery();
+  const [createContact] = useAddContactMutation();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -37,7 +39,7 @@ const Form = () => {
         name,
         number,
       };
-      dispatch(addContacts(contact));
+      createContact(contact);
       reset();
     }
   };
